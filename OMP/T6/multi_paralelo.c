@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]){
 	
 	srand(time(NULL));
 	int **a, *x, *y, i, j, tam_matriz, n_td, iam;
-	
+	//comentariodeprueba	
 	tam_matriz = atoi(argv[1]);
 	n_td = atoi(argv[2]);
 	x =(int *) malloc(sizeof(int)*tam_matriz);
