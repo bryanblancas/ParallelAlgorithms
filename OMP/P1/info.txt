@@ -1,0 +1,21 @@
+	practica 1 - nombre 
+a) HolaMundo.c paralelo - distríbuido
+
+	1) Código secuencial compilado con -fopenmp
+	2) Código paralelo con número de procesadores (NP) por defecto
+	3) Código paralelo con NP asignado en linea de comando "./hola_mundo 20" con th_id (está en desorden)
+	4) 3) impreso en orden de th_id
+
+b) Producto interno de 2 arreglos a[n], b[n], c[n] con n=(necesarias)
+	a[i]*b[i] = c[i]
+	
+	1) Generar el código secuencial -fopenmp
+		output 
+			print a[i]*b[i] = c[i]
+			print c[n]
+	2) Convertir el código en paralelo-distribuido  (impresión en desorden, NP con línea de comando)
+		output
+			print c[i]
+	3) Código paralelo-distribuido (impresión en orden dependiendo de c[i])
+	4) Realizar 3) pero ahora el th_id = i
+			

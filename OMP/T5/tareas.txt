@@ -1,0 +1,10 @@
+1er Examen    		10 septiembre 2018
+
+Tarea 5. (6 de septiembre 2018)
+	Cálculo de pi con 5 decimales de presición
+
+	a) integral 4/1+x² dx n->infinito   n: no. de divisiones
+
+	b) por cálculo aleatorio de área.
+
+	c) proponer un método.
