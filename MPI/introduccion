@@ -1,0 +1,23 @@
+INTRODUCCIÓN A MPI
+ (message passed interfaced)
+
+
+Master node (front-end, Administrador) distribuye el trabajo para los nodos hijos
+MODELO DE MEMORIA DISTRIBUIDA
+
+MODELO HTPC
+	high tecnical perfonmance computing
+	conocer la arquitectura en donde se va a trabajar 
+
+MODELO HPC
+	high performance computing 
+
+
+EL número de hilos a trabajar con mpi es fijo.
+
+MPI_Init     		- Identificanicialización de mpi
+MPI_Finalize 		- Termina mpi
+MPI_Comm_size		- Para aeveriguar el número de procesos
+MPI_Comm_rank		- Identifica el proceso
+MPI_Send			- Envía un mensaje
+MPI_Recv			- Recibe un mensaje
