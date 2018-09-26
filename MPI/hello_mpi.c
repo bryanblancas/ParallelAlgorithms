@@ -1,7 +1,12 @@
 #include <mpi.h> 
+#include <stdio.h>
 int main(int argc, char const *argv[]){
 	
-	//PRUEBA 2 cambiando desde chrome
-	//add
+	MPI_Init(&argc,(char ***) &argv);
+
+	printf("Hola mundo mpi\n");
+
+	MPI_Finalize();
+
 	return 0;
 }

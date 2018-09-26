@@ -21,3 +21,13 @@ MPI_Comm_size		- Para aeveriguar el número de procesos
 MPI_Comm_rank		- Identifica el proceso
 MPI_Send			- Envía un mensaje
 MPI_Recv			- Recibe un mensaje
+
+
+Datatype, correponden a los de c
+MPI_INT
+MPI_FLOAT
+.
+.
+.
+MPI_PACKET
+MPI_BYTE
