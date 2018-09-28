@@ -31,3 +31,22 @@ MPI_FLOAT
 .
 MPI_PACKET
 MPI_BYTE
+
+
+SEND Y RECV
+	MPI_Send(start, count, datatype, dest, tag, comm)  //bloqueante
+		1. start: puntero a los datos a enviar
+		2. count: número de elementos a enviar
+		3. datatype: tipo de dato 
+		4. dest: identificación del proceso destino
+		5. tag: etiqueta de la comunicación
+		6. comm: identificación del comunicador
+
+	MPI_Recv(start, count, datatype, source, tag, comm, status)
+		1. start: puntero para la recepción de datos
+		2. count: número de elementos
+		3. datatype: tipo de dato
+		4. source: identificación del proceso origen
+		5. tag: etiqueta de la comunicación
+		6. comm: identificacipon del comunicador
+		7. status: puntero para acceso a la información sobre el mensaje

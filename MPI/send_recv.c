@@ -27,6 +27,7 @@ int main(int argc, char const *argv[]){
 
 	char msg[100];
 	int source, dest, myrank;
+	MPI_Status info;
 
 	MPI_Init(&argc,(char ***) &argv);
 		
@@ -39,7 +40,7 @@ int main(int argc, char const *argv[]){
 			printf("Mensaje enviado a %d desde %d\n",dest, myrank);
 		}
 		else if(myrank == 1){
-			MPI_Recv(msg, 100, MPI_CHAR, source, TAG, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			MPI_Recv(msg, 100, MPI_CHAR, source, TAG, MPI_COMM_WORLD,&info);
 			printf("Mensaje recibido en %d de %d\n", myrank, source);
 			printf("%s\n",msg);
 		}
