@@ -24,19 +24,20 @@ int test(int pid, int z){
 		//	printf("%d",v[i]);
 		//printf("\t(%d) \n\n", z);
 	}
+	
 	return cont;
 }
 
 int main(int argc, char const *argv[]){
 
-	int i, pid, npr, cont = 0, final = 0, destino, origen, ndat, tag;
+	int i, pid, size, cont = 0, final = 0, destino	, ndat, tag;
 	MPI_Status info;
 
 	MPI_Init(&argc,(char***) &argv);
-		MPI_Comm_size(MPI_COMM_WORLD, &npr);
+		MPI_Comm_size(MPI_COMM_WORLD, &size);
 		MPI_Comm_rank(MPI_COMM_WORLD, &pid);
 
-		for(i=pid; i<65536; i+= npr) cont += test(pid, i);
+		for(i=pid; i<65536; i+= size) cont += test(pid, i);
 
 		if(pid != 0){
 			destino = 0; tag = 0;
@@ -44,25 +45,15 @@ int main(int argc, char const *argv[]){
 		}	
 		else{
 			final += cont;
-			printf(azul" %d tiene CONT: %d\n"cerrar, pid, cont);
+			printf(azul" %d tiene SOLUCIONES: %d\n"cerrar, pid, cont);
 
-			origen = 1; tag = 0;
-			MPI_Recv(&cont, 1, MPI_INT, origen, tag, MPI_COMM_WORLD, &info);
-			MPI_Get_count(&info, MPI_INT, &ndat);
-			printf("\n\n"azul" %d recibe resultado de PR %d: TAG: %d, ndat: %d CONT: %d\n\n"cerrar, pid, info.MPI_SOURCE, info.MPI_TAG, ndat, cont);
-			final += cont;
-
-			origen = 2; tag = 0;
-			MPI_Recv(&cont, 1, MPI_INT, origen, tag, MPI_COMM_WORLD, &info);
-			MPI_Get_count(&info, MPI_INT, &ndat);
-			printf("\n\n"azul" %d recibe resultado de PR %d: TAG: %d, ndat: %d CONT: %d\n\n"cerrar, pid, info.MPI_SOURCE, info.MPI_TAG, ndat, cont);
-			final += cont;
-
-			origen = 3; tag = 0;
-			MPI_Recv(&cont, 1, MPI_INT, origen, tag, MPI_COMM_WORLD, &info);
-			MPI_Get_count(&info, MPI_INT, &ndat);
-			printf("\n\n"azul" %d recibe resultado de PR %d: TAG: %d, ndat: %d CONT: %d\n\n"cerrar, pid, info.MPI_SOURCE, info.MPI_TAG, ndat, cont);
-			final += cont;
+		 	tag = 0;
+			for(i = 0; i<size-1; i++){
+				MPI_Recv(&cont, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &info);
+				MPI_Get_count(&info, MPI_INT, &ndat);
+				printf("\n\n"azul" %d recibe resultado de PR %d: TAG: %d, ndat: %d SOLUCIONES: %d\n\n"cerrar, pid, info.MPI_SOURCE, info.MPI_TAG, ndat, cont);
+				final += cont;
+			}
 
 			printf(" Número de soluciones: %d\n", final);
 		}
