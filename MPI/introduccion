@@ -50,3 +50,26 @@ SEND Y RECV
 		5. tag: etiqueta de la comunicación
 		6. comm: identificacipon del comunicador
 		7. status: puntero para acceso a la información sobre el mensaje
+
+
+
+REDUCE
+	MPI_Reduce(sendbuf, recvbuf, count, datatype, op, root, comm)
+		1. sendbuf: Address of send buffer (choice).
+		2. count: Number of elements in send buffer (integer).
+		3. datatype: Data type of elements of send buffer (handle).
+		4. op: Reduce operation (handle).
+		5. root: Rank of root process (integer).
+		6. comm: communicator (handle).
+	op
+	MPI_MIN
+	MPI_MAX
+	...
+
+BROADCAST
+	int MPI_Bcast(void *buffer, int count, MPI_Datatype datatype,int root, MPI_Comm comm)
+		1. buffer: Starting address of buffer (choice).
+		2. count: Number of entries in buffer (integer).
+		3. datatype: Data type of buffer (handle).
+		4. root: Rank of broadcast root (integer).
+		5. comm: Communicator (handle).

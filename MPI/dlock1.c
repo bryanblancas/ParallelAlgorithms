@@ -42,7 +42,9 @@ int main(int argc, char const *argv[]){
 			printf("\n C es %d en proc 1 \n", c);
 		}
 
-	MPI_Finalize();
+	int i = MPI_Finalize();
+
+	printf("%d\n",i);
 
 	return 0;
 }
