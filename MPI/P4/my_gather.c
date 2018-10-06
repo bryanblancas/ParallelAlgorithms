@@ -11,7 +11,7 @@ void my_gather(int * data, int * l,int num_elements_per_proc, MPI_Datatype datat
 	recv = (int *)malloc(sizeof(int) * num_elements_per_proc);
 
 	if(world_rank == root){
-		//root put his values into data
+		//root puts his values into data
 		for (int i = 0; i < num_elements_per_proc; ++i) data[world_rank * num_elements_per_proc+i] = l[i];
 		//receive values from others process
 		for(int i = 0; i < world_size-1; i++){
