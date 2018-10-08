@@ -1,6 +1,8 @@
 INTRODUCCIÓN A MPI
  (message passed interfaced)
 
+status.MPI_SOURCE
+status.MPI_TAG
 
 Master node (front-end, Administrador) distribuye el trabajo para los nodos hijos
 MODELO DE MEMORIA DISTRIBUIDA
