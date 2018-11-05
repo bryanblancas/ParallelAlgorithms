@@ -4,3 +4,6 @@ EN CUDA HAY 3 TIPOS DE DEFINICIÓN DE FUNCIONES:
 __global__			:	Función lista para ejecutarse en el CPU o GPU
 __host__			: 	Solamente funciona si la ejecuto en el CPU
 __device__			:	Solamente se ejecuta en la GPU
+
+compilar con NVIDIA 
+	nvcc $nombre_archivo.cu -o $archivo_salida
