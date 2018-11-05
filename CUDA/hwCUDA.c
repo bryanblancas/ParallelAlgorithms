@@ -12,8 +12,10 @@ int main(int argc, char const *argv[]){
 	
 	char a[N] = "hello \0\0\0\0\0";
 	int b[N] = {15,10,6,0,-11,1,0,0,0,0,0,0,0,0,0,0};
+	
 	char *ad;	//la d se usa para decir que es una variable que será usada dentro del dispositivo
 	int *bd;
+
 	const int csize = N*sizeof(char);
 	const int isize = N*sizeof(int);
 
@@ -26,7 +28,7 @@ int main(int argc, char const *argv[]){
 
 	dim3 dimBlock(blocksize, 1);	//vector de 3 datos
 	dim3 dimGrid(1, 1);
-	hello<<<dimGrid, dimBlock>>>(ad, bd);
+	hello<<<dimGrid, dimBlock>>>(ad, bd);	//llamada a un función de cuda, se le manda la arquitectura <<< >>>
 	cudaMemcpy(a, ad, csize, cudaMemcpyDeviceToHost);
 	cudaFree(ad);
 	cudaFree(bd);
