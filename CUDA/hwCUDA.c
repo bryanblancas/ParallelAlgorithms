@@ -5,7 +5,7 @@ const int blocksize = 16;
 
 __global__
 void hello(char *a, int *b){
-	a[threadIdx.x] += b[threadIdx.x];
+	a[threadIdx.x] += b[threadIdx.x]; //threadIdx == id del procesador
 }
 
 int main(int argc, char const *argv[]){
