@@ -11,7 +11,7 @@ void imprimir_matriz(int **matriz, int tam);
 
 int main(int argc, char const *argv[]){
 	int size, rank, th_id, th_size;
-	int **ma, **mb, *vec, i, j, k, *columna, *columna_resul;
+	int **ma, **mb, *vec, i, j, *columna, *columna_resul;
 
 	MPI_Init(NULL, NULL);
 		MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -23,7 +23,7 @@ int main(int argc, char const *argv[]){
 
 		//SÓLO EL PROCESO 0 VA A CREAR LA MATRIZ B, AQUELLA QUE SERÁ REPARTIDA ENTRE TODOS LOS PROCESOS
 		if(rank == 0){
-			for(i=0; i<1000000000; i++);
+			//for(i=0; i<1000000000; i++);
 			mb = crear_y_llenar_matriz(size);
 			printf("Soy el proceso %d y la matriz B es: \n", rank);
 			imprimir_matriz(mb, size);
