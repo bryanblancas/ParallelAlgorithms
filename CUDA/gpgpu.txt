@@ -1,9 +1,35 @@
 General Purpose Computing on Graphics Processing Unit (GPGPU)
 
 EN CUDA HAY 3 TIPOS DE DEFINICIÓN DE FUNCIONES:
-__global__			:	Función lista para ejecutarse en el CPU o GPU
-__host__			: 	Solamente funciona si la ejecuto en el CPU
-__device__			:	Solamente se ejecuta en la GPU
+	__global__			:	Función lista para ejecutarse en el CPU o GPU
+	__host__			: 	Solamente funciona si la ejecuto en el CPU
+	__device__			:	Solamente se ejecuta en la GPU
+
+LLAMADA A FUNCIONES
+	FUNC_NAME<<< . . . >>>(PARAM1, . . .);
+	<<< . . . >>>   ES LA TOPOLOGÍA DEL DISPOSITIVO
+	ncc = número total de bloques
+	<<< (BlockId.x,BlockId.y,BlockId.z) , (threadId.x,threadId.y,threadId.y) >>> 
+
+	1D	:	<<< 8, 128 >>> = <<< (8,1,1), (128,1,1) >>>
+
+		8 bloques de 128 CudaCores de forma lineal
+		Número de bloque Nc = BlockId.x * 128 + threadId.x
+		128 = ncc/GridId.x
+
+	2D	:	<<< (4,4), 64 >>>, <<< (4,4), (8,8) >>>
+
+		1. Matriz de 4 bloques por 4 bloques con 64 CudaCores cada uno
+		2. Matriz de 4 bloques por 4 bloques con una matriz de 8 por 8 CudaCores cada uno
+
+		Para 2:
+		Número de bloque Nc = (Grid3D.y * BlockId.y + BLockId.x)*64 + (Block3D.y * threadId.y + threadId.x)
+
+	3D	:	<<< (2,2,2), 128 >>>, <<< (2,2,2), (8,16) >>>, <<< (2,2,2), (4,4,8) >>>
+
+DATOS A IDENTIFICAR
+	in[threadIdx.x]
+	out[threadIdx.x]
 
 compilar con NVIDIA 
 	nvcc $nombre_archivo.cu -o $archivo_salida
