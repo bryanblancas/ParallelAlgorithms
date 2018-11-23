@@ -6,10 +6,21 @@ EN CUDA HAY 3 TIPOS DE DEFINICIÓN DE FUNCIONES:
 	__device__			:	Solamente se ejecuta en la GPU
 
 LLAMADA A FUNCIONES
+	
 	FUNC_NAME<<< . . . >>>(PARAM1, . . .);
+
+	ncc = número total de bloques (PROPIEDAD DEL DISPOSITIVO)
+	
 	<<< . . . >>>   ES LA TOPOLOGÍA DEL DISPOSITIVO
-	ncc = número total de bloques
-	<<< (BlockId.x,BlockId.y,BlockId.z) , (threadId.x,threadId.y,threadId.y) >>> 
+	<<< ( BlockSize.x , BlockSize.y , BlockSize.z ) , ( ThreadSize.x , ThreadSize.y , ThreadSize.y ) >>> 
+
+	Identificadores de la topología:
+
+		blockId.x						threadId.x 
+		blockId.y						threadId.y 
+		blockId.z						threadId.z 
+
+EJEMPLOS
 
 	1D	:	<<< 8, 128 >>> = <<< (8,1,1), (128,1,1) >>>
 
@@ -33,3 +44,15 @@ DATOS A IDENTIFICAR
 
 compilar con NVIDIA 
 	nvcc $nombre_archivo.cu -o $archivo_salida
+
+
+
+
+TAREA:
+
+	multiplicación de vectores con:
+	<<< (bx,by,bx) , (tx,ty,tz) >>>
+
+	Estudiar en carpeta examples de servidor del cic
+		vect-matriz
+		matmult
