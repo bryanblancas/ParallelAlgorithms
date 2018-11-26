@@ -56,3 +56,14 @@ TAREA:
 	Estudiar en carpeta examples de servidor del cic
 		vect-matriz
 		matmult
+
+
+
+
+	multiplicación de vectores
+
+	<<< 32, 32 >>>
+
+	C[ThreadSize.x * blockId.x + threadId.x] 
+	+=  	A[ threadSize.x * blockId.x + threadId.x ]
+			B[ threadSize.x * threadId.x + blockId.x ]
