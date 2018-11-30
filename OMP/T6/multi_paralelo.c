@@ -28,7 +28,6 @@ int main(int argc, char const *argv[]){
 	}
 
 	omp_set_num_threads(n_td);
-
 	
 	double empezar = omp_get_wtime();
 	#pragma omp parallel for private(j)
