@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <mpi.h>
+#include <omp.h>
 
 #define azul "\x1B[36m"
 #define cerrar "\x1B[00m"
@@ -15,8 +16,8 @@ void imprimir_matriz(int **m, int tam);
 int main(int argc, char const *argv[]){
 	srand(time(NULL));
 	
-	if(argc != 2){
-		printf("./sum_matrices_mpi.c tam_matriz\n");
+	if(argc != 3){
+		printf("./sum_matrices_mpi.c tam_matriz n_th_omp\n");
 		return 1;
 	}
 
@@ -25,7 +26,7 @@ int main(int argc, char const *argv[]){
 	
 	//Variables para las matrices y el manejo del gather and scatter
 	int **ma, **mb, *vec, *columna, *columna_resul;
-	int i, j, tam = atoi(argv[1]), n_per_proc, tam_per_proc;
+	int i, j, tam = atoi(argv[1]), n_per_proc, tam_per_proc, n_th = atoi(argv[2]);
 
 	MPI_Init(NULL, NULL);
 		MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -67,16 +68,20 @@ int main(int argc, char const *argv[]){
 		MPI_Scatter(vec, tam_per_proc, MPI_INT, columna, tam_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
 
 		//LAS OPERACINES PARA CALCULAR LA SUMA ma + columna
+		
 		int n_colm[n_per_proc];
 		for(j = 0; j < n_per_proc; j++)
 			n_colm[j] = rank * n_per_proc + j;
 
-		int k = 0; j = 0;
-		for(i = 0; i < tam_per_proc; i++){
-			columna_resul[i] = ma[j++][n_colm[k]] + columna[i];
-			if(j == tam){ j = 0; k++;}
+		omp_set_num_threads(n_th);
+
+		#pragma omp parallel for private(i)
+		for(j = 0; j < n_per_proc; j++){
+			for (i = 0; i < tam; ++i)
+				columna_resul[tam*j+i] = ma[i][n_colm[j]] + columna[tam*j+i];
 		}
 
+		
 		//RETORNAR LAS MATRICES COLUMNA CALCULADAS AL PROCESO 0
 		MPI_Gather(columna_resul, tam_per_proc, MPI_INT, vec, tam_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
 
