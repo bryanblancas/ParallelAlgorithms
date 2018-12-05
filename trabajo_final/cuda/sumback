@@ -3,6 +3,13 @@
 const int N = 3;
 
 __global__
+void suma(int *a, int *b, int *c, int tam){
+	int id = blockIdx.x * blockDim.x + threadIdx.x;
+	if(id < tam)
+		c[id] = a[id] + b[id];
+}
+
+__global__
 void producto(int *a, int *b, int *c, int tam){
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
 	int idy = blockIdx.y * blockDim.y + threadIdx.y;
@@ -15,7 +22,6 @@ void producto(int *a, int *b, int *c, int tam){
 	}
 }
 
-
 void imprimir_matriz(int *a, int tam);
 int n(int a, int b){
 	return (int) (a/b)  + (a % b == 0? 0:1);
@@ -23,7 +29,7 @@ int n(int a, int b){
 
 int main(int argc, char const *argv[]){
 	
-	int i, size = N * N;
+	int i, th_size, bl_size, size = N * N;
 	size_t size_mem = N * N * sizeof(int);
 	//matriz en HOST
 	int *a_h, *b_h, *c_h;
@@ -55,6 +61,20 @@ int main(int argc, char const *argv[]){
 	cudaMemcpy(c_d, c_h, size_mem, cudaMemcpyHostToDevice);
 
 	//CREAR TOPOLOGÍA
+	th_size = 5;
+	bl_size = size / th_size + (size % th_size == 0? 0:1);
+
+	printf("<<< %d , %d >>>\n", bl_size, th_size);
+
+	suma <<< bl_size, th_size >>> (a_d, b_d, c_d, size);
+
+	//REGRESAR MATRICES
+	cudaMemcpy(c_h, c_d, size_mem, cudaMemcpyDeviceToHost);
+
+	printf("MATRIZ C: ");
+	imprimir_matriz(c_h, N);
+
+	//CREAR TOPOLOGÍA
 	dim3 th_size3(2,2);
 	dim3 bl_size3(n(N, th_size3.x), n(N, th_size3.y));
 
@@ -80,9 +100,9 @@ int main(int argc, char const *argv[]){
 
 void imprimir_matriz(int *a, int tam){
 	printf("\n");
-	for(int i =0; i< N; i++){
+	for(int i = 0; i < N; i++){
 		for(int j = 0; j < N; j++)
-			printf("%5d",a[i*N+j]);
+			printf("%5d", a[i]);	
 		printf("\n");
 	}
 }
