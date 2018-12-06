@@ -29,6 +29,7 @@ int main(int argc, char const *argv[]){
 
 	//declaración y creación de matrices
 	int **a, **b, **c, tam = atoi(argv[2]);
+	double t;
 
 	crear_matriz(&a, tam);
 	llenar_matriz(a, tam);
@@ -37,9 +38,9 @@ int main(int argc, char const *argv[]){
 	crear_matriz(&c, tam);
 
 	printf("Matriz A: \n");
-	imprimir_matriz(a, tam);
+	//imprimir_matriz(a, tam);
 	printf("\nMatriz B: \n");
-	imprimir_matriz(b, tam);
+	//imprimir_matriz(b, tam);
 	printf("\n");
 
 	//asignación de número de hilos
@@ -47,14 +48,18 @@ int main(int argc, char const *argv[]){
 	omp_set_num_threads(n_th);
 
 	//suma de matrices
+	t -= omp_get_wtime();
 	suma_matrices(a, b, c, tam);
-	printf(azul"Suma A+B: \n"cerrar);
-	imprimir_matriz(c, tam);
+	t += omp_get_wtime();
+	printf(azul"Suma A+B time: %lf\n"cerrar, t);
+	//imprimir_matriz(c, tam);
 
 	//multiplicación de matrices
+	t-= omp_get_wtime();
 	mul_matrices(a, b, c, tam);
-	printf(azul"\nProducto A+B: \n"cerrar);
-	imprimir_matriz(c, tam);
+	t+= omp_get_wtime();
+	printf(azul"\nProducto A+B time: %lf\n"cerrar, t);
+	//imprimir_matriz(c, tam);
 
 	free(a);
 	free(b);

@@ -11,6 +11,8 @@
 void crear_matriz(int ***m, int tam);
 void llenar_matriz(int **m, int tam);
 void imprimir_matriz(int **m, int tam);
+void producto_matrices(int **ma, int *columna_resul, int tam, int n_per_proc, int *columna);
+void suma_matrices(int **ma, int *columna_resul, int tam, int tam_per_proc, int *columna, int *n_colm);
 
 int main(int argc, char const *argv[]){
 	srand(time(NULL));
@@ -26,6 +28,7 @@ int main(int argc, char const *argv[]){
 	//Variables para las matrices y el manejo del gather and scatter
 	int **ma, **mb, **mc, *vec, *vec2, *columna, *columna_resul;
 	int i, j, tam = atoi(argv[1]), n_per_proc, tam_per_proc;
+	double t;
 
 	MPI_Init(NULL, NULL);
 		MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -43,6 +46,7 @@ int main(int argc, char const *argv[]){
 		**
 		**
 		**	Creado de matrices columna y de matriz a, que todos los procesos ocuparan
+		**
 		**
 		**/
 
@@ -95,18 +99,11 @@ int main(int argc, char const *argv[]){
 		//Repartir las matrices columna entre todos los procesos
 		MPI_Scatter(vec, tam_per_proc, MPI_INT, columna, tam_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
 
-		//Operaciones para calcular el producto ma * columna 
-		int rep = 0, i_m = 0;
-		
-		while(rep < n_per_proc){
-			for(i = 0; i < tam; i++){
-				columna_resul[i_m] = 0;
-				for(j=0; j < tam; j++)
-					columna_resul[i_m] += ma[i][j] * columna[tam*rep + j];
-				i_m++;
-			}
-			rep++;
-		}
+
+		t -= MPI_Wtime();
+		producto_matrices(ma,columna_resul,tam, n_per_proc, columna);
+		t += MPI_Wtime();
+
 
 		//Retornar las matrices columna calculadas al proceso 0
 		MPI_Gather(columna_resul, tam_per_proc, MPI_INT, vec, tam_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
@@ -135,11 +132,11 @@ int main(int argc, char const *argv[]){
 		for(j = 0; j < n_per_proc; j++)
 			n_colm[j] = rank * n_per_proc + j;
 
-		int k = 0; j = 0;
-		for(i = 0; i < tam_per_proc; i++){
-			columna_resul[i] = ma[j++][n_colm[k]] + columna[i];
-			if(j == tam){ j = 0; k++;}
-		}
+
+
+		suma_matrices(ma, columna_resul, tam, tam_per_proc, columna, n_colm);
+
+
 
 		//Retornar las matrices columa calculadas al proceso 0
 		MPI_Gather(columna_resul, tam_per_proc, MPI_INT, vec2, tam_per_proc, MPI_INT, 0, MPI_COMM_WORLD);
@@ -155,6 +152,28 @@ int main(int argc, char const *argv[]){
 	MPI_Finalize();
 
 	return 0;
+}
+
+void suma_matrices(int **ma, int *columna_resul, int tam, int tam_per_proc, int *columna, int *n_colm){
+	int k = 0, j = 0, i;
+	for(i = 0; i < tam_per_proc; i++){
+		columna_resul[i] = ma[j++][n_colm[k]] + columna[i];
+		if(j == tam){ j = 0; k++;}
+	}
+}
+
+void producto_matrices(int **ma, int *columna_resul, int tam,int n_per_proc, int *columna){
+	int rep = 0, i_m = 0, i, j;
+		
+	while(rep < n_per_proc){
+		for(i = 0; i < tam; i++){
+			columna_resul[i_m] = 0;
+			for(j=0; j < tam; j++)
+				columna_resul[i_m] += ma[i][j] * columna[tam*rep + j];
+			i_m++;
+		}
+		rep++;
+	}
 }
 
 void crear_matriz(int ***m, int tam){
