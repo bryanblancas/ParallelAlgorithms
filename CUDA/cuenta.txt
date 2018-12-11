@@ -1,7 +1,0 @@
-ssh -l cuda_05 148.204.64.117 | 100 
-
-ambiente gráfico -x11 (no usar al menos que sea muuy tarde)
-
-pass: cuda_05
-
-o del número que corresponda
